@@ -1,0 +1,55 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <a class="marca" routerLink="/dashboard">MedScribe <span>AI</span></a>
+    <nav class="navegacion">
+      <a routerLink="/dashboard">Panel</a>
+      <a routerLink="/pacientes">Pacientes</a>
+      <a routerLink="/consultas" class="activo">Consultas</a>
+      <a routerLink="/documentos">Documentos</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <div class="cabecera-pagina">
+      <h2>Consultas</h2>
+      <a class="boton-principal" routerLink="/consultas/nuevo">+ Nueva consulta</a>
+    </div>
+
+    <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+    <div class="mensaje-info" *ngIf="cargando">Cargando...</div>
+
+    <div class="tabla-envoltura" *ngIf="!cargando">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Medico</th>
+            <th>Especialidad</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of consultas">
+            <td>{{ c.idConsulta }}</td>
+            <td>#{{ c.idPacienteAtendido }}</td>
+            <td>#{{ c.idMedicoResponsable }}</td>
+            <td>{{ c.especialidadMedicaAplicada }}</td>
+            <td>{{ c.tipoDocumentoClinico }}</td>
+            <td>{{ c.fechaYHoraDeLaConsulta || '-' }}</td>
+            <td>{{ c.estadoActualDeLaConsulta || '-' }}</td>
+            <td>
+              <button class="boton-peligro" (click)="eliminar(c)">Eliminar</button>
+            </td>
+          </tr>
+          <tr *ngIf="consultas.length === 0">
+            <td colspan="8" class="vacio">No hay consultas registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>

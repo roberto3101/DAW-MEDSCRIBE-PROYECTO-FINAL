@@ -1,0 +1,63 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <a class="marca" routerLink="/dashboard">MedScribe <span>AI</span></a>
+    <nav class="navegacion">
+      <a routerLink="/dashboard">Panel</a>
+      <a routerLink="/pacientes">Pacientes</a>
+      <a routerLink="/consultas" class="activo">Consultas</a>
+      <a routerLink="/documentos">Documentos</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h2>Nueva consulta</h2>
+
+    <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+
+    <form class="formulario" (ngSubmit)="guardar()" #formulario="ngForm">
+      <div class="grilla">
+        <div class="campo">
+          <label for="idMedicoResponsable">ID medico responsable</label>
+          <input id="idMedicoResponsable" name="idMedicoResponsable" type="number" min="1" [(ngModel)]="consulta.idMedicoResponsable" required />
+        </div>
+
+        <div class="campo">
+          <label for="idPacienteAtendido">ID paciente</label>
+          <input id="idPacienteAtendido" name="idPacienteAtendido" type="number" min="1" [(ngModel)]="consulta.idPacienteAtendido" required />
+        </div>
+
+        <div class="campo">
+          <label for="especialidad">Especialidad</label>
+          <input id="especialidad" name="especialidad" [(ngModel)]="consulta.especialidad" required maxlength="100" />
+        </div>
+
+        <div class="campo">
+          <label for="tipoDocumento">Tipo de documento clinico</label>
+          <select id="tipoDocumento" name="tipoDocumento" [(ngModel)]="consulta.tipoDocumento" required>
+            <option value="SOAP">SOAP</option>
+            <option value="HistoriaClinica">Historia clinica</option>
+            <option value="Receta">Receta</option>
+            <option value="Personalizada">Personalizada</option>
+          </select>
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="transcripcion">Transcripcion</label>
+          <textarea id="transcripcion" name="transcripcion" rows="3" [(ngModel)]="consulta.transcripcion"></textarea>
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="notaClinica">Nota clinica estructurada</label>
+          <textarea id="notaClinica" name="notaClinica" rows="3" [(ngModel)]="consulta.notaClinica"></textarea>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <a class="boton-secundario" routerLink="/consultas">Cancelar</a>
+        <button type="submit" class="boton-principal" [disabled]="guardando || formulario.invalid">
+          {{ guardando ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

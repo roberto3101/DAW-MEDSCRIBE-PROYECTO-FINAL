@@ -1,0 +1,39 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <div class="marca">MedScribe <span>AI</span></div>
+    <div class="acciones">
+      <span class="saludo" *ngIf="usuario">
+        {{ usuario.nombreCompleto }}
+        <small>({{ usuario.rolDelSistema }})</small>
+      </span>
+      <button class="boton-secundario" (click)="cerrarSesion()">Cerrar sesion</button>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <h2 class="titulo">Bienvenido al panel</h2>
+    <p class="descripcion">
+      Seleccione un modulo para gestionar la informacion clinica.
+    </p>
+
+    <div class="grilla-tarjetas">
+      <a class="tarjeta" routerLink="/pacientes">
+        <div class="icono">P</div>
+        <h3>Pacientes</h3>
+        <p>Gestionar la lista de pacientes y sus datos clinicos.</p>
+      </a>
+
+      <a class="tarjeta" routerLink="/consultas">
+        <div class="icono">C</div>
+        <h3>Consultas</h3>
+        <p>Registrar y dar seguimiento a las consultas medicas.</p>
+      </a>
+
+      <a class="tarjeta" routerLink="/documentos">
+        <div class="icono">D</div>
+        <h3>Documentos</h3>
+        <p>Revisar los documentos clinicos generados.</p>
+      </a>
+    </div>
+  </main>
+</div>

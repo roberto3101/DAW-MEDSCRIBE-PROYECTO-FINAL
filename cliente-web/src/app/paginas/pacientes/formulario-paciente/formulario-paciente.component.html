@@ -1,0 +1,80 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <a class="marca" routerLink="/dashboard">MedScribe <span>AI</span></a>
+    <nav class="navegacion">
+      <a routerLink="/dashboard">Panel</a>
+      <a routerLink="/pacientes" class="activo">Pacientes</a>
+      <a routerLink="/consultas">Consultas</a>
+      <a routerLink="/documentos">Documentos</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h2>{{ idEditando !== null ? 'Editar paciente' : 'Nuevo paciente' }}</h2>
+
+    <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+
+    <form class="formulario" (ngSubmit)="guardar()" #formulario="ngForm">
+      <div class="grilla">
+        <div class="campo">
+          <label for="nombreDelPaciente">Nombre</label>
+          <input id="nombreDelPaciente" name="nombreDelPaciente" [(ngModel)]="paciente.nombreDelPaciente" required minlength="2" maxlength="100" />
+        </div>
+
+        <div class="campo">
+          <label for="apellidoDelPaciente">Apellido</label>
+          <input id="apellidoDelPaciente" name="apellidoDelPaciente" [(ngModel)]="paciente.apellidoDelPaciente" required minlength="2" maxlength="100" />
+        </div>
+
+        <div class="campo">
+          <label for="tipoDocumentoIdentidad">Tipo de documento</label>
+          <select id="tipoDocumentoIdentidad" name="tipoDocumentoIdentidad" [(ngModel)]="paciente.tipoDocumentoIdentidad" required>
+            <option value="DNI">DNI</option>
+            <option value="CE">CE</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="numeroDocumentoIdentidad">Numero de documento</label>
+          <input id="numeroDocumentoIdentidad" name="numeroDocumentoIdentidad" [(ngModel)]="paciente.numeroDocumentoIdentidad" required minlength="8" maxlength="20" />
+        </div>
+
+        <div class="campo">
+          <label for="fechaDeNacimiento">Fecha de nacimiento</label>
+          <input id="fechaDeNacimiento" name="fechaDeNacimiento" type="date" [(ngModel)]="paciente.fechaDeNacimiento" required />
+        </div>
+
+        <div class="campo">
+          <label for="sexoBiologico">Sexo</label>
+          <select id="sexoBiologico" name="sexoBiologico" [(ngModel)]="paciente.sexoBiologico" required>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="telefonoDeContacto">Telefono</label>
+          <input id="telefonoDeContacto" name="telefonoDeContacto" [(ngModel)]="paciente.telefonoDeContacto" maxlength="20" />
+        </div>
+
+        <div class="campo">
+          <label for="correoElectronico">Correo</label>
+          <input id="correoElectronico" name="correoElectronico" type="email" [(ngModel)]="paciente.correoElectronico" maxlength="150" />
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="direccionDomiciliaria">Direccion</label>
+          <input id="direccionDomiciliaria" name="direccionDomiciliaria" [(ngModel)]="paciente.direccionDomiciliaria" maxlength="300" />
+        </div>
+      </div>
+
+      <div class="acciones">
+        <a class="boton-secundario" routerLink="/pacientes">Cancelar</a>
+        <button type="submit" class="boton-principal" [disabled]="guardando || formulario.invalid">
+          {{ guardando ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

@@ -1,0 +1,57 @@
+<div class="contenedor-login">
+  <div class="tarjeta-login">
+    <header class="encabezado">
+      <h1 class="marca">MedScribe <span>AI</span></h1>
+      <p class="subtitulo">Sistema clinico asistido por IA</p>
+    </header>
+
+    <form (ngSubmit)="alEnviar()" #formulario="ngForm" autocomplete="on">
+      <label class="etiqueta" for="correo">Correo</label>
+      <input
+        id="correo"
+        name="correo"
+        type="email"
+        class="entrada"
+        placeholder="usuario@medscribe.pe"
+        [(ngModel)]="correo"
+        required
+        autocomplete="username"
+      />
+
+      <label class="etiqueta" for="contrasena">Contrasena</label>
+      <div class="campo-contrasena">
+        <input
+          id="contrasena"
+          name="contrasena"
+          [type]="mostrarContrasena ? 'text' : 'password'"
+          class="entrada entrada-contrasena"
+          placeholder="Ingrese su contrasena"
+          [(ngModel)]="contrasena"
+          required
+          autocomplete="current-password"
+        />
+        <button
+          type="button"
+          class="boton-mostrar"
+          (click)="alternarMostrarContrasena()"
+          [attr.aria-label]="mostrarContrasena ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+          [title]="mostrarContrasena ? 'Ocultar contrasena' : 'Mostrar contrasena'"
+        >
+          {{ mostrarContrasena ? '🙈' : '👁️' }}
+        </button>
+      </div>
+
+      <div class="mensaje-error" *ngIf="mensajeError">{{ mensajeError }}</div>
+
+      <button type="submit" class="boton-principal" [disabled]="cargando">
+        {{ cargando ? 'Ingresando...' : 'Iniciar sesion' }}
+      </button>
+    </form>
+
+    <div class="pista-demo">
+      <strong>Credenciales demo:</strong>
+      <div>admin&#64;medscribe.pe / Admin2026!</div>
+      <div>jroberto&#64;medscribe.pe / Medico2026!</div>
+    </div>
+  </div>
+</div>

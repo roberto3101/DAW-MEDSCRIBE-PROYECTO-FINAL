@@ -1,0 +1,54 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <a class="marca" routerLink="/dashboard">MedScribe <span>AI</span></a>
+    <nav class="navegacion">
+      <a routerLink="/dashboard">Panel</a>
+      <a routerLink="/pacientes" class="activo">Pacientes</a>
+      <a routerLink="/consultas">Consultas</a>
+      <a routerLink="/documentos">Documentos</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <div class="cabecera-pagina">
+      <h2>Pacientes</h2>
+      <a class="boton-principal" routerLink="/pacientes/nuevo">+ Nuevo paciente</a>
+    </div>
+
+    <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+    <div class="mensaje-info" *ngIf="cargando">Cargando...</div>
+
+    <div class="tabla-envoltura" *ngIf="!cargando">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre completo</th>
+            <th>Documento</th>
+            <th>Sexo</th>
+            <th>Telefono</th>
+            <th>Correo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pacientes">
+            <td>{{ p.idPaciente }}</td>
+            <td>{{ p.nombreDelPaciente }} {{ p.apellidoDelPaciente }}</td>
+            <td>{{ p.tipoDocumentoIdentidad }}: {{ p.numeroDocumentoIdentidad }}</td>
+            <td>{{ p.sexoBiologico }}</td>
+            <td>{{ p.telefonoDeContacto || '-' }}</td>
+            <td>{{ p.correoElectronico || '-' }}</td>
+            <td class="acciones-celda">
+              <button class="boton-secundario" (click)="editar(p.idPaciente)">Editar</button>
+              <button class="boton-peligro" (click)="eliminar(p)">Eliminar</button>
+            </td>
+          </tr>
+          <tr *ngIf="pacientes.length === 0">
+            <td colspan="7" class="vacio">No hay pacientes registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>

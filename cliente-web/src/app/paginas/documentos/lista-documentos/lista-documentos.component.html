@@ -1,0 +1,61 @@
+<div class="contenedor">
+  <header class="barra-superior">
+    <a class="marca" routerLink="/dashboard">MedScribe <span>AI</span></a>
+    <nav class="navegacion">
+      <a routerLink="/dashboard">Panel</a>
+      <a routerLink="/pacientes">Pacientes</a>
+      <a routerLink="/consultas">Consultas</a>
+      <a routerLink="/documentos" class="activo">Documentos</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <div class="cabecera-pagina">
+      <h2>Documentos</h2>
+    </div>
+
+    <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+    <div class="mensaje-info" *ngIf="cargando">Cargando...</div>
+
+    <div class="tabla-envoltura" *ngIf="!cargando">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Formato</th>
+            <th>Estado</th>
+            <th>Version</th>
+            <th>Fecha</th>
+            <th>Consulta</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of documentos">
+            <td>{{ d.idDocumento }}</td>
+            <td>{{ d.tipoDocumentoClinico }}</td>
+            <td>{{ d.formatoDeArchivo }}</td>
+            <td>{{ d.estadoDeAprobacion }}</td>
+            <td>v{{ d.numeroDeVersion }}</td>
+            <td>{{ d.fechaDeGeneracion || '-' }}</td>
+            <td>#{{ d.idConsultaVinculada }}</td>
+            <td class="acciones-celda">
+              <a class="boton-secundario" [href]="urlDescarga(d.idDocumento)" target="_blank" rel="noopener">Descargar</a>
+              <button
+                class="boton-principal"
+                *ngIf="d.estadoDeAprobacion === 'Borrador'"
+                (click)="aprobar(d)"
+              >
+                Aprobar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="documentos.length === 0">
+            <td colspan="8" class="vacio">No hay documentos registrados.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>

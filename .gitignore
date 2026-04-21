@@ -1,0 +1,56 @@
+# Variables de entorno
+.env
+!.env.example
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+.angular/
+
+# Java / Maven
+target/
+*.class
+.mvn/
+!.mvn/wrapper/maven-wrapper.properties
+
+# Docker volumes locales (si se montan)
+mysql_data/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Documentos generados
+gateway-dotnet/src/MedScribe.API/documentos-generados/*.pdf
+gateway-dotnet/src/MedScribe.API/documentos-generados/*.docx
+gateway-dotnet/src/MedScribe.API/documentos-generados/logos/
+gateway-dotnet/src/MedScribe.API/documentos-generados/config_documentos.json
+
+# Logs
+*.log
