@@ -1,0 +1,95 @@
+classDiagram
+    class Usuario {
+        +Long idUsuario
+        +String nombreCompleto
+        +String correoElectronico
+        +String contrasenaHasheada
+        +RolSistema rolDelSistema
+        +Long idRol
+        +Long idClinica
+        +Boolean estaCuentaActiva
+        +LocalDateTime ultimoAcceso
+    }
+
+    class Clinica {
+        +Long idClinica
+        +String razonSocial
+        +String rucDeLaClinica
+        +String nombreComercial
+        +String correoDeContacto
+        +String slugPublico
+        +Boolean estaClinicaActiva
+    }
+
+    class Paciente {
+        +Long idPaciente
+        +Long idClinica
+        +String nombreDelPaciente
+        +String apellidoDelPaciente
+        +String numeroDocumentoIdentidad
+        +String tipoDocumentoIdentidad
+        +LocalDate fechaDeNacimiento
+        +String sexoBiologico
+        +Boolean estaPacienteActivo
+    }
+
+    class Medico {
+        +Long idMedico
+        +Long idUsuarioVinculado
+        +Long idClinica
+        +String especialidadMedica
+        +String numeroColegiaturaDelPeru
+        +Boolean estaMedicoActivo
+    }
+
+    class Consulta {
+        +Long idConsulta
+        +Long idClinica
+        +Long idMedicoResponsable
+        +Long idPacienteAtendido
+        +String especialidadMedicaAplicada
+        +String tipoDocumentoClinico
+        +String transcripcionDelAudio
+        +String notaClinicaEstructurada
+        +String estadoActualDeLaConsulta
+        +Integer duracionEnSegundos
+    }
+
+    class Documento {
+        +Long idDocumento
+        +Long idConsultaVinculada
+        +String tipoDocumentoClinico
+        +String formatoDeArchivo
+        +String rutaFisicaDelArchivo
+        +String estadoDeAprobacion
+        +Integer numeroDeVersion
+    }
+
+    class RolDeClinica {
+        +Long idRol
+        +Long idClinica
+        +String nombreDelRol
+        +String descripcionDelRol
+        +String permisosEnFormatoJSON
+        +Boolean esRolBase
+    }
+
+    class UsuarioDeClinica {
+        +Long idUsuarioClinica
+        +Long idUsuario
+        +Long idClinica
+        +Long idRol
+        +String permisosPersonalizadosJSON
+    }
+
+    Clinica "1" --o "N" Usuario
+    Clinica "1" --o "N" Paciente
+    Clinica "1" --o "N" Medico
+    Clinica "1" --o "N" RolDeClinica
+    Usuario "1" --> "0..1" Medico : vinculado
+    Usuario "1" --> "0..1" RolDeClinica : tiene
+    Medico "1" --> "N" Consulta : atiende
+    Paciente "1" --> "N" Consulta : recibe
+    Consulta "1" --> "N" Documento : genera
+    Usuario "1" --o "1" UsuarioDeClinica : vinculo
+    RolDeClinica "1" --o "N" UsuarioDeClinica

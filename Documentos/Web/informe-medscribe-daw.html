@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedScribe AI - Informe del Proyecto Final | DAW</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  body { font-family: 'Inter', -apple-system, sans-serif; }
+  .gradient-bg { background: linear-gradient(135deg, #0ea5e9 0%, #0c4a6e 100%); }
+  .nav-link.active { background: #e0f2fe; color: #0369a1; font-weight: 600; }
+  .section { scroll-margin-top: 80px; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.85rem; }
+  code.inline { background: #e0f2fe; color: #0c4a6e; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+  .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px 12px; border: 1px solid #e2e8f0; text-align: left; font-size: 0.9rem; }
+  th { background: #f1f5f9; font-weight: 600; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-azul { background: #dbeafe; color: #1e40af; }
+  .badge-verde { background: #d1fae5; color: #065f46; }
+  .badge-naranja { background: #fed7aa; color: #9a3412; }
+  .badge-purpura { background: #ede9fe; color: #5b21b6; }
+  .integrante-card { transition: transform 0.2s; }
+  .integrante-card:hover { transform: translateY(-4px); }
+
+  /* Diagramas */
+  .diagrama-card {
+    background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+    overflow: hidden; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .diagrama-header {
+    padding: 1rem 1.5rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  }
+  .diagrama-header h3 { font-weight: 700; font-size: 1.05rem; color: #0c4a6e; }
+  .diagrama-header p { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+  .diagrama-body {
+    padding: 1.5rem; background: #fafafa; overflow: auto; cursor: zoom-in;
+    display: flex; justify-content: center; align-items: center; min-height: 200px;
+  }
+  .diagrama-body svg { max-width: 100%; height: auto; }
+  .btn-zoom {
+    background: #0ea5e9; color: white; border: none; padding: 6px 14px;
+    border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    white-space: nowrap; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-zoom:hover { background: #0284c7; }
+
+  /* Modal lightbox */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.92);
+    z-index: 1000; padding: 20px; flex-direction: column;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 16px; color: white; gap: 1rem;
+  }
+  .modal-toolbar h3 { font-size: 1.1rem; font-weight: 600; }
+  .modal-controls { display: flex; gap: 8px; }
+  .modal-btn {
+    background: rgba(255,255,255,0.15); color: white; border: none;
+    padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+    font-weight: 600; backdrop-filter: blur(10px);
+  }
+  .modal-btn:hover { background: rgba(255,255,255,0.3); }
+  .modal-canvas {
+    flex: 1; background: white; border-radius: 8px; overflow: auto;
+    position: relative;
+  }
+  .modal-inner {
+    transform-origin: 0 0; transition: transform 0.15s ease;
+    padding: 30px; display: inline-block; min-width: 100%;
+  }
+  .modal-inner svg { display: block; max-width: none !important; height: auto !important; }
+  .modal-help {
+    color: #94a3b8; font-size: 0.75rem; text-align: center; padding: 6px;
+  }
+  .modal-zoom-level {
+    background: rgba(255,255,255,0.15); color: white; padding: 8px 14px;
+    border-radius: 6px; font-size: 0.85rem; font-weight: 600;
+    min-width: 60px; text-align: center;
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<!-- HEADER -->
+<header class="gradient-bg text-white">
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="bg-white/20 backdrop-blur p-3 rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/></svg>
+      </div>
+      <h1 class="text-5xl font-bold tracking-tight">MedScribe AI</h1>
+    </div>
+    <p class="text-xl text-medico-50 mb-2">Sistema de gestion de consultas medicas con IA generativa</p>
+    <p class="text-medico-100">Informe del Proyecto Final - Desarrollo de Aplicaciones Web I (DAW)</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <span class="badge badge-azul">Angular 17</span>
+      <span class="badge badge-verde">Spring Boot 3.3</span>
+      <span class="badge badge-naranja">Python FastAPI</span>
+      <span class="badge badge-purpura">MySQL 8</span>
+      <span class="bg-white/20 px-3 py-1 rounded-full text-xs">Docker Compose</span>
+      <span class="bg-white/20 px-3 py-1 rounded-full text-xs">JWT + BCrypt</span>
+      <span class="bg-white/20 px-3 py-1 rounded-full text-xs">Multi-tenant</span>
+    </div>
+  </div>
+</header>
+
+<!-- NAV STICKY -->
+<nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex gap-1 overflow-x-auto">
+    <a href="#equipo" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Equipo</a>
+    <a href="#problema" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Problema</a>
+    <a href="#alcance" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Alcance</a>
+    <a href="#arquitectura" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Arquitectura</a>
+    <a href="#diagramas" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Diagramas</a>
+    <a href="#bd" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">BD</a>
+    <a href="#backend" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Backend</a>
+    <a href="#frontend" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Frontend</a>
+    <a href="#ia" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">IA</a>
+    <a href="#seguridad" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Seguridad</a>
+    <a href="#despliegue" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Despliegue</a>
+    <a href="#cumplimiento" class="nav-link px-4 py-2 rounded-lg text-sm whitespace-nowrap hover:bg-slate-100">Rubrica</a>
+  </div>
+</nav>
+
+<main class="max-w-6xl mx-auto px-6 py-10 space-y-16">
+
+<!-- EQUIPO -->
+<section id="equipo" class="section">
+  <h2 class="text-3xl font-bold mb-2">Equipo y responsabilidades</h2>
+  <p class="text-slate-600 mb-6">Cuatro integrantes, cada uno con un area definida. La metodologia es <strong>colaborativa con responsable principal por capa</strong>.</p>
+  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="card p-5 integrante-card border-t-4 border-orange-500">
+      <div class="text-xs text-orange-600 font-semibold mb-1">COORDINADOR</div>
+      <h3 class="font-bold text-lg">Jose Roberto La Rosa Ledezma</h3>
+      <p class="text-xs text-slate-500 mb-3">i202333980</p>
+      <p class="text-sm text-slate-700 mb-2"><strong>Servicio IA - Python</strong></p>
+      <p class="text-xs text-slate-600">FastAPI, Whisper, LLMs (cascade de 8 proveedores), generacion PDF/Word, prompt engineering.</p>
+    </div>
+    <div class="card p-5 integrante-card border-t-4 border-green-500">
+      <div class="text-xs text-green-600 font-semibold mb-1">BACKEND</div>
+      <h3 class="font-bold text-lg">Cesar Augusto Tovar Rondan</h3>
+      <p class="text-xs text-slate-500 mb-3">i202315442</p>
+      <p class="text-sm text-slate-700 mb-2"><strong>Java Spring Boot</strong></p>
+      <p class="text-xs text-slate-600">Gateway, Spring Security + JWT, Spring Data JPA, multi-tenant, controladores REST.</p>
+    </div>
+    <div class="card p-5 integrante-card border-t-4 border-purple-500">
+      <div class="text-xs text-purple-600 font-semibold mb-1">DATOS</div>
+      <h3 class="font-bold text-lg">Brayan Emanuel Pedro Gil Lipe</h3>
+      <p class="text-xs text-slate-500 mb-3">i202335854</p>
+      <p class="text-sm text-slate-700 mb-2"><strong>Base de datos MySQL</strong></p>
+      <p class="text-xs text-slate-600">Modelo ER, normalizacion 3NF, indices, FKs, multi-tenant, scripts de migracion.</p>
+    </div>
+    <div class="card p-5 integrante-card border-t-4 border-sky-500">
+      <div class="text-xs text-sky-600 font-semibold mb-1">FRONTEND</div>
+      <h3 class="font-bold text-lg">Antony Lucas Murillo Aramburu</h3>
+      <p class="text-xs text-slate-500 mb-3">i201916515</p>
+      <p class="text-sm text-slate-700 mb-2"><strong>Angular 17 + Tailwind</strong></p>
+      <p class="text-xs text-slate-600">SPA, standalone components, signals, lazy loading, MediaRecorder, interceptor JWT.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section id="problema" class="section">
+  <h2 class="text-3xl font-bold mb-4">Problema y propuesta de valor</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-6">
+      <h3 class="font-bold text-lg mb-3 text-red-700">Problema observado</h3>
+      <p class="text-sm text-slate-700 mb-3">En clinicas pequenas y medianas del Peru, los medicos invierten <strong>30-40% de la consulta</strong> escribiendo notas en lugar de atender al paciente. Las historias clinicas suelen ser:</p>
+      <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+        <li>Incompletas por presion de tiempo.</li>
+        <li>Inconsistentes en estructura entre medicos.</li>
+        <li>Dificiles de auditar.</li>
+        <li>No reutilizables para reportes.</li>
+      </ul>
+    </div>
+    <div class="card p-6">
+      <h3 class="font-bold text-lg mb-3 text-green-700">Solucion: MedScribe AI</h3>
+      <p class="text-sm text-slate-700 mb-3">Plataforma SaaS multi-tenant donde el medico:</p>
+      <ol class="list-decimal pl-5 text-sm text-slate-700 space-y-1">
+        <li><strong>Graba</strong> la conversacion con el paciente.</li>
+        <li>La IA <strong>transcribe</strong> y opcionalmente identifica hablantes.</li>
+        <li>Otra IA genera la <strong>nota SOAP estructurada</strong> en 7 secciones.</li>
+        <li>El medico <strong>revisa, firma digitalmente</strong> y exporta a PDF/Word.</li>
+      </ol>
+      <p class="text-sm text-slate-700 mt-3">Resultado: el medico recupera tiempo y la historia clinica es <strong>uniforme, completa y auditable</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ALCANCE -->
+<section id="alcance" class="section">
+  <h2 class="text-3xl font-bold mb-4">Alcance funcional</h2>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="card p-5"><h3 class="font-bold mb-2">Gestion clinica</h3><ul class="text-sm space-y-1 text-slate-700"><li>- Registro de clinica</li><li>- Perfil con logo y firma</li><li>- Multi-tenant aislado</li></ul></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Usuarios y roles</h3><ul class="text-sm space-y-1 text-slate-700"><li>- Crear/editar usuarios</li><li>- Roles personalizados</li><li>- Permisos granulares</li></ul></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Pacientes</h3><ul class="text-sm space-y-1 text-slate-700"><li>- CRUD completo</li><li>- Validacion de DNI</li><li>- Antecedentes clinicos</li></ul></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Medicos</h3><ul class="text-sm space-y-1 text-slate-700"><li>- CRUD completo</li><li>- Numero de colegiatura</li><li>- Especialidad</li></ul></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Consultas con IA</h3><ul class="text-sm space-y-1 text-slate-700"><li>- Grabacion de audio</li><li>- Transcripcion + diarizacion</li><li>- Generacion SOAP automatica</li><li>- Edicion y firma digital</li></ul></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Documentos</h3><ul class="text-sm space-y-1 text-slate-700"><li>- Exportacion PDF (ReportLab)</li><li>- Exportacion Word (python-docx)</li><li>- Logo + firma incluidos</li></ul></div>
+  </div>
+</section>
+
+<!-- ARQUITECTURA TEXTUAL -->
+<section id="arquitectura" class="section">
+  <h2 class="text-3xl font-bold mb-4">Arquitectura del sistema</h2>
+  <p class="text-slate-600 mb-6">Tres servicios independientes orquestados con Docker Compose. Comunicacion HTTP entre ellos. Frontend nunca llama a IA directamente con secretos.</p>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="card p-4"><div class="badge badge-azul mb-2">cliente-web</div><p class="text-sm text-slate-600">Angular 17 + Tailwind. SPA con 13 rutas y lazy loading. Bundle inicial 98 KB.</p></div>
+    <div class="card p-4"><div class="badge badge-verde mb-2">gateway-java</div><p class="text-sm text-slate-600">Spring Boot 3.3. JWT con HS512. Spring Data JPA. 7 controladores REST.</p></div>
+    <div class="card p-4"><div class="badge badge-naranja mb-2">servicio-ia</div><p class="text-sm text-slate-600">FastAPI. Cascade Whisper de 4 proveedores y cascade LLM de 8 proveedores.</p></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- DIAGRAMAS - 9 EMBEBIDOS, CON ZOOM                             -->
+<!-- ============================================================ -->
+<section id="diagramas" class="section">
+  <h2 class="text-3xl font-bold mb-2">Diagramas del proyecto</h2>
+  <p class="text-slate-600 mb-2">9 diagramas UML/Mermaid que cubren arquitectura, casos de uso, modelo, secuencia, componentes, despliegue y estados.</p>
+  <p class="text-sm text-sky-700 mb-6">Click en cualquier diagrama o en el boton <strong>"Ampliar"</strong> para abrirlo en pantalla completa con zoom y desplazamiento.</p>
+
+  <!-- 01 Arquitectura -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>1. Arquitectura general del sistema</h3>
+        <p>Vision macro: cliente, capas, servicios y proveedores externos de IA.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-01', '1. Arquitectura general del sistema')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" id="mmd-01-container" onclick="abrirZoom('mmd-01', '1. Arquitectura general del sistema')">
+      <div class="mermaid" id="mmd-01">
+graph TB
+    subgraph "Cliente"
+        Browser[Navegador del medico]
+    end
+    subgraph "Capa de presentacion"
+        Angular[cliente-web<br/>Angular 17 + nginx<br/>Puerto 3000]
+    end
+    subgraph "Capa de negocio"
+        Gateway[gateway-java<br/>Spring Boot 3.3<br/>Puerto 5000<br/>JWT + JPA + BCrypt]
+        IAService[servicio-ia<br/>Python FastAPI<br/>Puerto 8000<br/>Cascade IA]
+    end
+    subgraph "Capa de datos"
+        MySQL[(MySQL 8.0<br/>Puerto 3307<br/>MedScribeDB)]
+    end
+    subgraph "Proveedores externos de IA"
+        Groq[Groq<br/>Whisper + Llama]
+        HF[HuggingFace<br/>Llama 3.3]
+        Mistral[Mistral<br/>Voxtral + Small]
+        Deepgram[Deepgram<br/>Nova-3]
+        SambaNova[SambaNova<br/>Llama 3.3]
+    end
+    Browser -->|HTTP/HTTPS| Angular
+    Angular -->|/api/*| Gateway
+    Angular -->|/api/ia/*| IAService
+    Gateway -->|JDBC| MySQL
+    Gateway -.->|HTTP interno| IAService
+    IAService -.->|Cascade Whisper| Groq
+    IAService -.->|Fallback| HF
+    IAService -.->|Fallback| Mistral
+    IAService -.->|Ultimo recurso| Deepgram
+    IAService -.->|Cascade LLM| SambaNova
+    style Angular fill:#0ea5e9,color:#fff
+    style Gateway fill:#10b981,color:#fff
+    style IAService fill:#8b5cf6,color:#fff
+    style MySQL fill:#f59e0b,color:#fff
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Casos de uso -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>2. Diagrama de casos de uso</h3>
+        <p>10 casos de uso principales con actores Visitante, Medico y Administrador.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-02', '2. Diagrama de casos de uso')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-02', '2. Diagrama de casos de uso')">
+      <div class="mermaid" id="mmd-02">
+graph TB
+    Visitante((Visitante))
+    Medico((Medico))
+    Admin((Administrador))
+    Admin -.heredaDe.-> Medico
+    subgraph "MedScribe AI - Sistema"
+        CU01[CU-01<br/>Iniciar sesion]
+        CU02[CU-02<br/>Registrar clinica]
+        CU03[CU-03<br/>Gestionar pacientes]
+        CU04[CU-04<br/>Crear consulta con audio]
+        CU05[CU-05<br/>Procesar audio con IA]
+        CU06[CU-06<br/>Aprobar consulta]
+        CU07[CU-07<br/>Descargar documento]
+        CU08[CU-08<br/>Gestionar usuarios]
+        CU09[CU-09<br/>Gestionar roles]
+        CU10[CU-10<br/>Configurar formato documentos]
+    end
+    Visitante --> CU02
+    Medico --> CU01
+    Medico --> CU03
+    Medico --> CU04
+    Medico --> CU05
+    Medico --> CU06
+    Medico --> CU07
+    Admin --> CU08
+    Admin --> CU09
+    Admin --> CU10
+    CU04 -.include.-> CU05
+    CU05 -.include.-> CU07
+    style Medico fill:#10b981,color:#fff
+    style Admin fill:#f59e0b,color:#fff
+    style Visitante fill:#94a3b8,color:#fff
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Clases -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>3. Diagrama de clases (entidades JPA)</h3>
+        <p>Las 8 entidades principales con sus atributos y relaciones.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-03', '3. Diagrama de clases')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-03', '3. Diagrama de clases')">
+      <div class="mermaid" id="mmd-03">
+classDiagram
+    class Usuario {
+        +Long idUsuario
+        +String nombreCompleto
+        +String correoElectronico
+        +String contrasenaHasheada
+        +RolSistema rolDelSistema
+        +Long idRol
+        +Long idClinica
+        +Boolean estaCuentaActiva
+    }
+    class Clinica {
+        +Long idClinica
+        +String razonSocial
+        +String rucDeLaClinica
+        +String nombreComercial
+        +String slugPublico
+        +Boolean estaClinicaActiva
+    }
+    class Paciente {
+        +Long idPaciente
+        +Long idClinica
+        +String nombreDelPaciente
+        +String numeroDocumentoIdentidad
+        +LocalDate fechaDeNacimiento
+        +Boolean estaPacienteActivo
+    }
+    class Medico {
+        +Long idMedico
+        +Long idUsuarioVinculado
+        +Long idClinica
+        +String especialidadMedica
+        +String numeroColegiaturaDelPeru
+    }
+    class Consulta {
+        +Long idConsulta
+        +Long idClinica
+        +Long idMedicoResponsable
+        +Long idPacienteAtendido
+        +String transcripcionDelAudio
+        +String notaClinicaEstructurada
+        +String estadoActualDeLaConsulta
+    }
+    class Documento {
+        +Long idDocumento
+        +Long idConsultaVinculada
+        +String tipoDocumentoClinico
+        +String formatoDeArchivo
+        +String estadoDeAprobacion
+    }
+    class RolDeClinica {
+        +Long idRol
+        +Long idClinica
+        +String nombreDelRol
+        +String permisosEnFormatoJSON
+        +Boolean esRolBase
+    }
+    class UsuarioDeClinica {
+        +Long idUsuarioClinica
+        +Long idUsuario
+        +Long idClinica
+        +Long idRol
+    }
+    Clinica "1" --o "N" Usuario
+    Clinica "1" --o "N" Paciente
+    Clinica "1" --o "N" Medico
+    Clinica "1" --o "N" RolDeClinica
+    Usuario "1" --> "0..1" Medico : vinculado
+    Medico "1" --> "N" Consulta : atiende
+    Paciente "1" --> "N" Consulta : recibe
+    Consulta "1" --> "N" Documento : genera
+    Usuario "1" --o "1" UsuarioDeClinica : vinculo
+    RolDeClinica "1" --o "N" UsuarioDeClinica
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 ER -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>4. Modelo Entidad-Relacion (MySQL)</h3>
+        <p>Estructura fisica de la base de datos con FK e indices unicos.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-04', '4. Modelo Entidad-Relacion')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-04', '4. Modelo Entidad-Relacion')">
+      <div class="mermaid" id="mmd-04">
+erDiagram
+    CLINICAS {
+        bigint IdClinica PK
+        varchar RazonSocial
+        varchar RucDeLaClinica UK
+        varchar NombreComercial
+        varchar SlugPublico UK
+        boolean EstaClinicaActiva
+    }
+    USUARIOS {
+        bigint IdUsuario PK
+        bigint IdClinica FK
+        bigint IdRol FK
+        varchar NombreCompleto
+        varchar CorreoElectronico UK
+        varchar ContrasenaHasheada
+        boolean EstaCuentaActiva
+    }
+    MEDICOS {
+        bigint IdMedico PK
+        bigint IdUsuarioVinculado FK
+        bigint IdClinica FK
+        varchar EspecialidadMedica
+        varchar NumeroColegiaturaDelPeru
+    }
+    PACIENTES {
+        bigint IdPaciente PK
+        bigint IdClinica FK
+        varchar NombreDelPaciente
+        varchar NumeroDocumentoIdentidad UK
+        date FechaDeNacimiento
+        boolean EstaPacienteActivo
+    }
+    CONSULTAS {
+        bigint IdConsulta PK
+        bigint IdClinica FK
+        bigint IdMedicoResponsable FK
+        bigint IdPacienteAtendido FK
+        longtext TranscripcionDelAudio
+        longtext NotaClinicaEstructurada
+        varchar EstadoActualDeLaConsulta
+    }
+    DOCUMENTOS {
+        bigint IdDocumento PK
+        bigint IdConsultaVinculada FK
+        varchar TipoDocumentoClinico
+        varchar FormatoDeArchivo
+        varchar EstadoDeAprobacion
+    }
+    ROLESDECLINICA {
+        bigint IdRol PK
+        bigint IdClinica FK
+        varchar NombreDelRol
+        longtext PermisosEnFormatoJSON
+        boolean EsRolBase
+    }
+    USUARIOSDECLINICA {
+        bigint IdUsuarioClinica PK
+        bigint IdUsuario FK
+        bigint IdClinica FK
+        bigint IdRol FK
+    }
+    CLINICAS ||--o{ USUARIOS : tiene
+    CLINICAS ||--o{ PACIENTES : registra
+    CLINICAS ||--o{ MEDICOS : emplea
+    CLINICAS ||--o{ ROLESDECLINICA : define
+    USUARIOS ||--o| MEDICOS : vinculado
+    USUARIOS ||--o| USUARIOSDECLINICA : pertenece
+    ROLESDECLINICA ||--o{ USUARIOSDECLINICA : asignado
+    MEDICOS ||--o{ CONSULTAS : atiende
+    PACIENTES ||--o{ CONSULTAS : recibe
+    CONSULTAS ||--o{ DOCUMENTOS : genera
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Secuencia login -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>5. Secuencia: Inicio de sesion (login)</h3>
+        <p>Flujo completo desde el formulario hasta la generacion del JWT.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-05', '5. Secuencia: Login')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-05', '5. Secuencia: Login')">
+      <div class="mermaid" id="mmd-05">
+sequenceDiagram
+    actor User as Medico
+    participant FE as Angular
+    participant API as Spring Boot
+    participant SEC as JwtFiltro + BCrypt
+    participant DB as MySQL
+    User->>FE: Ingresa correo + contrasena
+    FE->>API: POST /api/autenticacion/iniciar-sesion
+    API->>DB: SELECT * FROM Usuarios WHERE Correo = ?
+    DB-->>API: Usuario (con hash)
+    API->>SEC: BCrypt.matches(plain, hash)
+    alt Contrasena correcta
+        SEC-->>API: true
+        API->>API: Generar JWT (HS512)
+        API->>DB: UPDATE UltimoAcceso = NOW()
+        API-->>FE: 200 OK {token, usuario}
+        FE->>FE: localStorage.setItem('token')
+        FE-->>User: Redirige a /panel
+    else Contrasena incorrecta
+        SEC-->>API: false
+        API-->>FE: 401 Unauthorized
+        FE-->>User: Muestra error
+    end
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 Secuencia transcripcion -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>6. Secuencia: Transcripcion + generacion SOAP</h3>
+        <p>Cascade de proveedores de IA: Whisper y LLM con fallbacks automaticos.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-06', '6. Secuencia: Transcripcion + IA')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-06', '6. Secuencia: Transcripcion + IA')">
+      <div class="mermaid" id="mmd-06">
+sequenceDiagram
+    actor User as Medico
+    participant FE as Angular
+    participant IA as servicio-ia
+    participant Groq as Groq Whisper
+    participant Mistral as Mistral
+    participant API as gateway-java
+    participant DB as MySQL
+    User->>FE: Click "Procesar con IA"
+    FE->>IA: POST /api/ia/transcribir (audio.webm)
+    rect rgb(255, 240, 240)
+        note right of IA: Cascade Whisper
+        IA->>Groq: transcribe(audio)
+        Groq--xIA: 403 Access denied
+        IA->>Mistral: transcribe(audio)
+        Mistral-->>IA: "El paciente de 30 anos..."
+    end
+    IA-->>FE: {transcripcion}
+    FE->>IA: POST /api/ia/procesar
+    rect rgb(240, 240, 255)
+        note right of IA: Cascade LLM
+        IA->>Groq: chat.completions
+        Groq--xIA: 403 Access denied
+        IA->>Mistral: chat.completions
+        Mistral-->>IA: "## S - Subjetivo..."
+    end
+    IA-->>FE: {nota_clinica}
+    FE->>API: POST /api/consultas/registrar (JWT)
+    API->>DB: INSERT INTO Consultas
+    DB-->>API: idConsulta = 42
+    API-->>FE: 201 {idConsulta}
+    FE-->>User: Muestra nota SOAP
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 Componentes -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>7. Diagrama de componentes</h3>
+        <p>Modulos internos de cada servicio y como se conectan entre si.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-07', '7. Diagrama de componentes')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-07', '7. Diagrama de componentes')">
+      <div class="mermaid" id="mmd-07">
+graph LR
+    subgraph "Cliente Web (Angular 17)"
+        Pages[Paginas<br/>12 standalone]
+        Services[Servicios HTTP<br/>7 services]
+        Guards[authGuard]
+        Inter[authInterceptor]
+        Layouts[Plantilla<br/>Publica/Autenticada]
+    end
+    subgraph "Gateway Java (Spring Boot 3.3)"
+        Controllers[7 Controladores REST]
+        ServicesJ[8 Servicios @Service]
+        Repos[14 Repositorios JPA]
+        Entities[14 Entidades JPA]
+        SecConfig[SecurityConfig + JwtFiltro]
+    end
+    subgraph "Servicio IA (Python FastAPI)"
+        Routers[6 Routers]
+        IASvcs[Whisper cascade<br/>LLM cascade]
+        DocGen[Generadores PDF / Word]
+    end
+    subgraph "MySQL 8.0"
+        Tables[14 Tablas + FK + indices]
+    end
+    subgraph "Externos"
+        OpenAICompat[Groq, HF, Mistral, SambaNova,<br/>Cerebras, NVIDIA, LLM7, GitHub Models]
+        DeepgramAPI[Deepgram API]
+    end
+    Pages --> Services
+    Services --> Inter
+    Pages --> Guards
+    Guards --> Layouts
+    Inter -->|HTTP /api| Controllers
+    Inter -->|HTTP /api/ia| Routers
+    Controllers --> ServicesJ
+    Controllers --> SecConfig
+    ServicesJ --> Repos
+    Repos --> Entities
+    Entities --> Tables
+    Routers --> IASvcs
+    Routers --> DocGen
+    IASvcs -.cascade.-> OpenAICompat
+    IASvcs -.fallback.-> DeepgramAPI
+    style Pages fill:#0ea5e9,color:#fff
+    style Controllers fill:#10b981,color:#fff
+    style Routers fill:#8b5cf6,color:#fff
+    style Tables fill:#f59e0b,color:#fff
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 Despliegue -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>8. Diagrama de despliegue</h3>
+        <p>Contenedores Docker, puertos expuestos y conexiones de red.</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-08', '8. Diagrama de despliegue')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-08', '8. Diagrama de despliegue')">
+      <div class="mermaid" id="mmd-08">
+graph TB
+    subgraph "Maquina del desarrollador o servidor"
+        subgraph "Docker Compose Network"
+            DC1[medscribe-mysql<br/>mysql:8.0]
+            DC2[medscribe-gateway<br/>eclipse-temurin:17-jre-alpine]
+            DC3[medscribe-servicio-ia<br/>python:3.12-slim]
+            DC4[medscribe-cliente-web<br/>nginx:alpine]
+        end
+        subgraph "Puertos expuestos"
+            P1[3307: MySQL]
+            P2[5000: Gateway Java]
+            P3[8000: Servicio IA]
+            P4[3000: Frontend]
+        end
+    end
+    subgraph "Internet"
+        Browser[Navegador del usuario]
+        APIs[APIs externas:<br/>Groq, HF, Mistral, Deepgram]
+    end
+    Browser -->|http://localhost:3000| P4
+    P4 --> DC4
+    DC4 -->|nginx proxy /api| DC2
+    DC4 -->|nginx proxy /api/ia| DC3
+    DC2 -->|JDBC| DC1
+    DC3 -.->|HTTPS| APIs
+    P1 --> DC1
+    P2 --> DC2
+    P3 --> DC3
+    style DC1 fill:#f59e0b,color:#fff
+    style DC2 fill:#10b981,color:#fff
+    style DC3 fill:#8b5cf6,color:#fff
+    style DC4 fill:#0ea5e9,color:#fff
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 Estados -->
+  <div class="diagrama-card">
+    <div class="diagrama-header">
+      <div>
+        <h3>9. Diagrama de estados: nueva consulta</h3>
+        <p>Transiciones de la pagina de grabacion (Esperando, Grabando, Procesando, Completado).</p>
+      </div>
+      <button class="btn-zoom" onclick="abrirZoom('mmd-09', '9. Estados: nueva consulta')">Ampliar</button>
+    </div>
+    <div class="diagrama-body" onclick="abrirZoom('mmd-09', '9. Estados: nueva consulta')">
+      <div class="mermaid" id="mmd-09">
+stateDiagram-v2
+    [*] --> Esperando : Usuario abre /consultas/nueva
+    Esperando --> Grabando : Click microfono (con paciente)
+    Esperando --> Esperando : Click microfono (sin paciente)
+    Grabando --> Detenido : Click stop
+    Detenido --> Transcribiendo : Click "Procesar con IA"
+    Detenido --> Esperando : Click "Grabar de nuevo"
+    Transcribiendo --> Procesando : Cascade Whisper OK
+    Transcribiendo --> Detenido : Transcripcion vacia
+    Procesando --> Completado : Cascade LLM OK
+    Procesando --> Detenido : Todos los LLMs fallan
+    Completado --> Esperando : Click "Nueva grabacion"
+    Completado --> [*] : Usuario navega a otra pagina
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BD -->
+<section id="bd" class="section">
+  <h2 class="text-3xl font-bold mb-4">Base de datos (MySQL 8)</h2>
+  <p class="text-slate-600 mb-4">14 tablas en <strong>3FN</strong>, indices unicos, FKs con integridad referencial y <strong>multi-tenant por columna IdClinica</strong>. Ver el diagrama 4 de la seccion anterior.</p>
+  <div class="card p-6">
+    <h3 class="font-bold mb-3">Decisiones clave</h3>
+    <table>
+      <thead><tr><th>Decision</th><th>Por que</th></tr></thead>
+      <tbody>
+        <tr><td>FK simples (Long) sin relaciones bidireccionales JPA</td><td>Evita problema N+1 y simplifica DTOs.</td></tr>
+        <tr><td>Multi-tenant por <code class="inline">IdClinica</code></td><td>Aislamiento fisico de datos entre clinicas.</td></tr>
+        <tr><td>LONGTEXT en <code class="inline">NotaClinicaEstructurada</code></td><td>TEXT (65 KB) era insuficiente para notas largas.</td></tr>
+        <tr><td>Indices unicos en correo y RUC</td><td>Login O(log n) y evitar duplicados.</td></tr>
+        <tr><td><code class="inline">ddl-auto=none</code> en produccion</td><td>El script SQL es la fuente de verdad, no Hibernate.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- BACKEND -->
+<section id="backend" class="section">
+  <h2 class="text-3xl font-bold mb-4">Backend Java (Spring Boot 3.3)</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-6"><h3 class="font-bold mb-3">Stack</h3><ul class="text-sm space-y-1"><li>- Java 17 + Spring Boot 3.3.5</li><li>- Spring Security + JJWT (HS512)</li><li>- Spring Data JPA + Hibernate</li><li>- BCryptPasswordEncoder</li><li>- Lombok</li><li>- MySQL 8 driver</li></ul></div>
+    <div class="card p-6"><h3 class="font-bold mb-3">Capas</h3><ul class="text-sm space-y-1"><li><strong>Controladores</strong>: 7 (Auth, Clinica, Paciente, Medico, Consulta, Rol, UsuarioClinica)</li><li><strong>Servicios</strong>: 7 con logica de negocio</li><li><strong>Repositorios</strong>: extienden <code class="inline">JpaRepository</code></li><li><strong>Entidades</strong>: 14 mapeadas con JPA</li><li><strong>DTOs</strong>: peticion + respuesta separados</li></ul></div>
+  </div>
+  <div class="card p-6 mt-4">
+    <h3 class="font-bold mb-3">Multi-tenant en cada servicio</h3>
+    <pre>// UsuarioAutenticadoProveedor.java
+public Long idClinicaActual() {
+  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+  Jwt jwt = (Jwt) auth.getPrincipal();
+  return jwt.getClaim("idClinica");
+}
+
+// PacienteServicio.java
+public List&lt;Paciente&gt; listar() {
+  Long idClinica = usuarioAutenticado.idClinicaActual();
+  return pacienteRepo.findByIdClinicaAndEstaPacienteActivoTrue(idClinica);
+}</pre>
+  </div>
+</section>
+
+<!-- FRONTEND -->
+<section id="frontend" class="section">
+  <h2 class="text-3xl font-bold mb-4">Frontend Angular 17</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-6"><h3 class="font-bold mb-3">Caracteristicas tecnicas</h3><ul class="text-sm space-y-1"><li>- <strong>Standalone components</strong> (sin NgModule)</li><li>- <strong>Signals</strong> para estado reactivo</li><li>- <strong>Lazy loading</strong> en las 13 rutas</li><li>- <strong>Tailwind CSS</strong> con paleta <code class="inline">medico-*</code></li><li>- <strong>Lucide Angular</strong> para iconos</li><li>- <strong>HttpClient + interceptor</strong> para JWT</li></ul></div>
+    <div class="card p-6"><h3 class="font-bold mb-3">Metricas</h3><ul class="text-sm space-y-1"><li>- Bundle inicial: <strong>~98 KB</strong></li><li>- 12 paginas standalone</li><li>- 4 componentes reutilizables</li><li>- 7 servicios HTTP</li><li>- 2 plantillas (publica / autenticada)</li><li>- 2 guards (auth / solo-admin)</li></ul></div>
+  </div>
+  <div class="card p-6 mt-4">
+    <h3 class="font-bold mb-3">Interceptor JWT</h3>
+    <pre>export const authInterceptor: HttpInterceptorFn = (req, next) =&gt; {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const peticion = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+    return next(peticion);
+  }
+  return next(req);
+};</pre>
+  </div>
+</section>
+
+<!-- IA -->
+<section id="ia" class="section">
+  <h2 class="text-3xl font-bold mb-4">Servicio de IA (Python FastAPI)</h2>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="card p-6"><h3 class="font-bold mb-3">Cascade Whisper</h3><ol class="list-decimal pl-5 text-sm space-y-1"><li><strong>Groq</strong> - rapido, gratis</li><li><strong>HuggingFace Inference</strong> - fallback estable</li><li><strong>Mistral Voxtral</strong> - alternativa europea</li><li><strong>Deepgram</strong> - ultimo recurso (de pago)</li></ol></div>
+    <div class="card p-6"><h3 class="font-bold mb-3">Cascade LLM</h3><ol class="list-decimal pl-5 text-sm space-y-1"><li>Groq (Llama 3.3 70B)</li><li>SambaNova</li><li>Cerebras</li><li>NVIDIA NIM</li><li>HuggingFace</li><li>Mistral</li><li>LLM7</li><li>GitHub Models</li></ol></div>
+  </div>
+  <div class="card p-6 mt-4">
+    <h3 class="font-bold mb-3">Endpoints expuestos</h3>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Funcion</th></tr></thead>
+      <tbody>
+        <tr><td><code class="inline">POST /transcribir</code></td><td>Recibe audio, devuelve texto</td></tr>
+        <tr><td><code class="inline">POST /generar-nota</code></td><td>Recibe transcripcion, devuelve JSON SOAP</td></tr>
+        <tr><td><code class="inline">POST /generar-pdf</code></td><td>Devuelve PDF (ReportLab)</td></tr>
+        <tr><td><code class="inline">POST /generar-word</code></td><td>Devuelve DOCX (python-docx)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SEGURIDAD -->
+<section id="seguridad" class="section">
+  <h2 class="text-3xl font-bold mb-4">Seguridad</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="card p-5"><h3 class="font-bold mb-2">Autenticacion</h3><p class="text-sm text-slate-700">JWT firmado con HS512. Token incluye <code class="inline">idUsuario</code>, <code class="inline">idClinica</code>, rol y permisos.</p></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Contrasenas</h3><p class="text-sm text-slate-700">BCrypt con factor 10. Salt aleatorio por hash.</p></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Multi-tenant</h3><p class="text-sm text-slate-700"><code class="inline">idClinica</code> viene del JWT, no del cliente.</p></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Secretos</h3><p class="text-sm text-slate-700">API keys solo en <code class="inline">.env</code> del servicio Python. Excluido del repo.</p></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">CORS</h3><p class="text-sm text-slate-700">Configurado en Spring para aceptar solo el origen del frontend.</p></div>
+    <div class="card p-5"><h3 class="font-bold mb-2">Validacion</h3><p class="text-sm text-slate-700">DTOs con <code class="inline">@Valid</code> en backend. Validaciones (DNI, RUC, correo) en frontend.</p></div>
+  </div>
+</section>
+
+<!-- DESPLIEGUE -->
+<section id="despliegue" class="section">
+  <h2 class="text-3xl font-bold mb-4">Despliegue con Docker Compose</h2>
+  <p class="text-slate-600 mb-4">Un solo comando levanta los 4 servicios: <code class="inline">docker compose up -d</code>. Ver el diagrama 8 de la seccion de diagramas.</p>
+  <div class="card p-6">
+    <pre>services:
+  mysql:
+    image: mysql:8.0
+    ports: ["3306:3306"]
+  gateway-java:
+    build: ./gateway-java
+    ports: ["8080:8080"]
+    depends_on: [mysql]
+  servicio-ia:
+    build: ./servicio-ia
+    ports: ["8000:8000"]
+    env_file: ./servicio-ia/.env
+  cliente-web:
+    build: ./cliente-web
+    ports: ["80:80"]
+    depends_on: [gateway-java, servicio-ia]</pre>
+  </div>
+</section>
+
+<!-- CUMPLIMIENTO RUBRICA -->
+<section id="cumplimiento" class="section">
+  <h2 class="text-3xl font-bold mb-4">Cumplimiento de la rubrica DAW</h2>
+  <div class="card p-6">
+    <table>
+      <thead><tr><th>Requisito</th><th>Cumplimiento</th></tr></thead>
+      <tbody>
+        <tr><td>Framework SPA</td><td><span class="badge badge-verde">SI</span> Angular 17 standalone</td></tr>
+        <tr><td>Backend con framework</td><td><span class="badge badge-verde">SI</span> Spring Boot 3.3 + Spring Security</td></tr>
+        <tr><td>Base de datos relacional</td><td><span class="badge badge-verde">SI</span> MySQL 8 con 14 tablas en 3FN</td></tr>
+        <tr><td>4 metodos HTTP (GET/POST/PUT/DELETE)</td><td><span class="badge badge-verde">SI</span> En cada CRUD</td></tr>
+        <tr><td>Autenticacion segura</td><td><span class="badge badge-verde">SI</span> JWT HS512 + BCrypt</td></tr>
+        <tr><td>Validacion de datos</td><td><span class="badge badge-verde">SI</span> Backend (@Valid) y frontend</td></tr>
+        <tr><td>Manejo de roles y permisos</td><td><span class="badge badge-verde">SI</span> Roles personalizables</td></tr>
+        <tr><td>Despliegue funcional</td><td><span class="badge badge-verde">SI</span> Docker Compose 4 servicios</td></tr>
+        <tr><td>Documentacion tecnica</td><td><span class="badge badge-verde">SI</span> Carpeta <code class="inline">Documentos/</code> completa</td></tr>
+        <tr><td>Repositorio Git</td><td><span class="badge badge-verde">SI</span> GitHub con <code class="inline">.gitignore</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-8 text-slate-500 text-sm border-t mt-12">
+  <p>MedScribe AI - Proyecto Final DAW 2026</p>
+  <p class="mt-1">Roberto La Rosa (Coord.) - Cesar Tovar - Brayan Pedro - Antony Murillo</p>
+</footer>
+
+</main>
+
+<!-- ===================== MODAL ZOOM ===================== -->
+<div class="modal-overlay" id="modalZoom">
+  <div class="modal-toolbar">
+    <h3 id="modalTitulo">Diagrama</h3>
+    <div class="modal-controls">
+      <button class="modal-btn" onclick="cambiarZoom(-0.25)">－ Alejar</button>
+      <span class="modal-zoom-level" id="zoomLevel">100%</span>
+      <button class="modal-btn" onclick="cambiarZoom(0.25)">＋ Acercar</button>
+      <button class="modal-btn" onclick="ajustarPantalla()">⤢ Ajustar</button>
+      <button class="modal-btn" onclick="restablecerZoom()">↺ 100%</button>
+      <button class="modal-btn" onclick="cerrarZoom()">✕ Cerrar</button>
+    </div>
+  </div>
+  <div class="modal-canvas" id="modalCanvas">
+    <div class="modal-inner" id="modalInner"></div>
+  </div>
+  <p class="modal-help">Usa los botones de zoom o Ctrl+rueda. Scroll para desplazar. ESC para cerrar.</p>
+</div>
+
+<script>
+  // Capturar fuentes Mermaid ANTES de que se rendericen
+  const fuentesMermaid = {};
+  document.querySelectorAll('.mermaid').forEach(el => {
+    fuentesMermaid[el.id] = el.textContent.trim();
+  });
+
+  // Mermaid init
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: { useMaxWidth: true, htmlLabels: true },
+    sequence: { useMaxWidth: true },
+    er: { useMaxWidth: true },
+    class: { useMaxWidth: true },
+    state: { useMaxWidth: true }
+  });
+
+  // Scroll spy
+  const links = document.querySelectorAll('.nav-link');
+  const sections = document.querySelectorAll('section.section');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+  });
+
+  // ============== MODAL ZOOM ==============
+  const modal = document.getElementById('modalZoom');
+  const canvas = document.getElementById('modalCanvas');
+  const inner = document.getElementById('modalInner');
+  const titulo = document.getElementById('modalTitulo');
+  const zoomLevel = document.getElementById('zoomLevel');
+  let zoomActual = 1;
+
+  async function abrirZoom(idDiagrama, titulo_) {
+    const fuente = fuentesMermaid[idDiagrama];
+    if (!fuente) { alert('No se encontro la fuente del diagrama.'); return; }
+    titulo.textContent = titulo_;
+    inner.innerHTML = '<div style="padding:40px;color:#64748b">Renderizando...</div>';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    zoomActual = 1;
+    aplicarZoom();
+    try {
+      const idTemp = 'mmd-modal-' + Date.now();
+      const { svg } = await mermaid.render(idTemp, fuente);
+      inner.innerHTML = svg;
+      // Tras renderizar, ajustar a la ventana automaticamente
+      setTimeout(ajustarPantalla, 50);
+    } catch (e) {
+      inner.innerHTML = '<div style="padding:40px;color:#ef4444">Error al renderizar: ' + e.message + '</div>';
+    }
+  }
+
+  function aplicarZoom() {
+    inner.style.transform = 'scale(' + zoomActual + ')';
+    zoomLevel.textContent = Math.round(zoomActual * 100) + '%';
+  }
+
+  function cambiarZoom(delta) {
+    zoomActual = Math.max(0.25, Math.min(5, zoomActual + delta));
+    aplicarZoom();
+  }
+
+  function restablecerZoom() {
+    zoomActual = 1;
+    aplicarZoom();
+    canvas.scrollTo(0, 0);
+  }
+
+  function ajustarPantalla() {
+    const svg = inner.querySelector('svg');
+    if (!svg) return;
+    // Reset al tamano natural
+    svg.removeAttribute('style');
+    svg.style.maxWidth = 'none';
+    const bbox = svg.getBoundingClientRect();
+    const cw = canvas.clientWidth - 60;
+    const ch = canvas.clientHeight - 60;
+    if (bbox.width === 0) return;
+    const scale = Math.min(cw / bbox.width, ch / bbox.height, 1);
+    zoomActual = scale > 0 ? scale : 1;
+    aplicarZoom();
+    canvas.scrollTo(0, 0);
+  }
+
+  function cerrarZoom() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    inner.innerHTML = '';
+  }
+
+  // Ctrl + rueda para zoom
+  canvas.addEventListener('wheel', e => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      cambiarZoom(e.deltaY < 0 ? 0.1 : -0.1);
+    }
+  }, { passive: false });
+
+  document.addEventListener('keydown', e => {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'Escape') cerrarZoom();
+    else if (e.key === '+' || e.key === '=') cambiarZoom(0.25);
+    else if (e.key === '-') cambiarZoom(-0.25);
+    else if (e.key === '0') restablecerZoom();
+  });
+  modal.addEventListener('click', e => {
+    if (e.target === modal || e.target === canvas) cerrarZoom();
+  });
+</script>
+</body>
+</html>

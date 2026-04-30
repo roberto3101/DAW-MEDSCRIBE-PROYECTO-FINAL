@@ -1,0 +1,37 @@
+stateDiagram-v2
+    [*] --> Esperando : Usuario abre /consultas/nueva
+
+    Esperando --> Grabando : Click microfono<br/>(con paciente seleccionado)
+    Esperando --> Esperando : Click microfono<br/>(sin paciente)<br/>muestra alerta amarilla
+
+    Grabando --> Detenido : Click stop<br/>(o requestData + stop)
+
+    Detenido --> Transcribiendo : Click "Procesar con IA"
+    Detenido --> Esperando : Click "Grabar de nuevo"
+
+    Transcribiendo --> Procesando : Cascade Whisper<br/>devuelve transcripcion >= 10 chars
+    Transcribiendo --> Detenido : Transcripcion vacia<br/>(alerta "Habla mas fuerte")
+
+    Procesando --> Completado : Cascade LLM genera nota
+    Procesando --> Detenido : Todos los LLMs fallan<br/>(alerta de error)
+
+    Completado --> Esperando : Click "Nueva grabacion"
+    Completado --> [*] : Usuario navega a otra pagina
+
+    note right of Esperando
+        Boton mic: gris (deshabilitado sin paciente)
+        o azul (habilitado con paciente)
+    end note
+
+    note right of Grabando
+        Boton mic: rojo, animacion ping
+        Contador de duracion activo
+    end note
+
+    note right of Completado
+        Muestra:
+        - Transcripcion
+        - Nota SOAP/HC/Receta
+        - Botones Descargar PDF/Word
+        Persiste en MySQL via /consultas/registrar
+    end note

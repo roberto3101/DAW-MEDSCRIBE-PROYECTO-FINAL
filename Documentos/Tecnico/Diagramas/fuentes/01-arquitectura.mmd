@@ -1,0 +1,42 @@
+graph TB
+    subgraph "Cliente"
+        Browser[Navegador del medico]
+    end
+
+    subgraph "Capa de presentacion"
+        Angular[cliente-web<br/>Angular 17 + nginx<br/>Puerto 3000]
+    end
+
+    subgraph "Capa de negocio"
+        Gateway[gateway-java<br/>Spring Boot 3.3<br/>Puerto 5000<br/>JWT + JPA + BCrypt]
+        IAService[servicio-ia<br/>Python FastAPI<br/>Puerto 8000<br/>Cascade IA]
+    end
+
+    subgraph "Capa de datos"
+        MySQL[(MySQL 8.0<br/>Puerto 3307<br/>MedScribeDB)]
+    end
+
+    subgraph "Proveedores externos de IA"
+        Groq[Groq<br/>Whisper + Llama]
+        HF[HuggingFace<br/>Llama 3.3]
+        Mistral[Mistral<br/>Voxtral + Small]
+        Deepgram[Deepgram<br/>Nova-3]
+        SambaNova[SambaNova<br/>Llama 3.3]
+    end
+
+    Browser -->|HTTP/HTTPS| Angular
+    Angular -->|/api/*| Gateway
+    Angular -->|/api/ia/*| IAService
+    Gateway -->|JDBC| MySQL
+    Gateway -.->|HTTP interno| IAService
+
+    IAService -.->|Cascade<br/>Whisper| Groq
+    IAService -.->|Fallback| HF
+    IAService -.->|Fallback| Mistral
+    IAService -.->|Ultimo recurso| Deepgram
+    IAService -.->|Cascade LLM| SambaNova
+
+    style Angular fill:#0ea5e9,color:#fff
+    style Gateway fill:#10b981,color:#fff
+    style IAService fill:#8b5cf6,color:#fff
+    style MySQL fill:#f59e0b,color:#fff

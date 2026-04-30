@@ -1,0 +1,27 @@
+sequenceDiagram
+    actor User as Medico
+    participant FE as Angular<br/>(cliente-web)
+    participant API as Spring Boot<br/>(gateway-java)
+    participant SEC as JwtFiltro +<br/>BCryptPasswordEncoder
+    participant DB as MySQL<br/>(MedScribeDB)
+
+    User->>FE: Ingresa correo + contrasena
+    FE->>FE: Click "Iniciar Sesion"
+    FE->>API: POST /api/autenticacion/iniciar-sesion<br/>{correoElectronico, contrasena}
+    API->>DB: SELECT * FROM Usuarios<br/>WHERE CorreoElectronico = ?
+    DB-->>API: Usuario (con ContrasenaHasheada)
+    API->>SEC: BCrypt.matches(plain, hash)
+    alt Contrasena correcta
+        SEC-->>API: true
+        API->>API: Generar JWT (HS512)<br/>con idUsuario, idClinica, rol
+        API->>API: Construir UsuarioDTO<br/>con permisos del rol
+        API->>DB: UPDATE Usuarios<br/>SET UltimoAcceso = NOW()
+        API-->>FE: 200 OK<br/>{token, usuario}
+        FE->>FE: localStorage.setItem('token')
+        FE->>FE: localStorage.setItem('medscribe_sesion')
+        FE-->>User: Redirige a /panel
+    else Contrasena incorrecta
+        SEC-->>API: false
+        API-->>FE: 401 Unauthorized<br/>{mensaje: "Credenciales incorrectas"}
+        FE-->>User: Muestra error en pantalla
+    end

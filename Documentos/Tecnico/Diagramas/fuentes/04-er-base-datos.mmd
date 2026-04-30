@@ -1,0 +1,91 @@
+erDiagram
+    CLINICAS {
+        bigint IdClinica PK
+        varchar RazonSocial
+        varchar RucDeLaClinica UK
+        varchar NombreComercial
+        varchar SlugPublico UK
+        boolean EstaClinicaActiva
+    }
+
+    USUARIOS {
+        bigint IdUsuario PK
+        bigint IdClinica FK
+        bigint IdRol FK
+        varchar NombreCompleto
+        varchar CorreoElectronico UK
+        varchar ContrasenaHasheada
+        enum RolDelSistema
+        boolean EstaCuentaActiva
+        datetime UltimoAcceso
+    }
+
+    MEDICOS {
+        bigint IdMedico PK
+        bigint IdUsuarioVinculado FK
+        bigint IdClinica FK
+        varchar EspecialidadMedica
+        varchar NumeroColegiaturaDelPeru
+    }
+
+    PACIENTES {
+        bigint IdPaciente PK
+        bigint IdClinica FK
+        varchar NombreDelPaciente
+        varchar ApellidoDelPaciente
+        varchar NumeroDocumentoIdentidad UK
+        date FechaDeNacimiento
+        varchar SexoBiologico
+        boolean EstaPacienteActivo
+    }
+
+    CONSULTAS {
+        bigint IdConsulta PK
+        bigint IdClinica FK
+        bigint IdMedicoResponsable FK
+        bigint IdPacienteAtendido FK
+        varchar EspecialidadMedicaAplicada
+        varchar TipoDocumentoClinico
+        longtext TranscripcionDelAudio
+        longtext NotaClinicaEstructurada
+        varchar EstadoActualDeLaConsulta
+        datetime FechaYHoraDeLaConsulta
+    }
+
+    DOCUMENTOS {
+        bigint IdDocumento PK
+        bigint IdConsultaVinculada FK
+        varchar TipoDocumentoClinico
+        varchar FormatoDeArchivo
+        varchar RutaFisicaDelArchivo
+        varchar EstadoDeAprobacion
+        int NumeroDeVersion
+    }
+
+    ROLESDECLINICA {
+        bigint IdRol PK
+        bigint IdClinica FK
+        varchar NombreDelRol
+        varchar DescripcionDelRol
+        longtext PermisosEnFormatoJSON
+        boolean EsRolBase
+    }
+
+    USUARIOSDECLINICA {
+        bigint IdUsuarioClinica PK
+        bigint IdUsuario FK
+        bigint IdClinica FK
+        bigint IdRol FK
+        longtext PermisosPersonalizadosJSON
+    }
+
+    CLINICAS ||--o{ USUARIOS : tiene
+    CLINICAS ||--o{ PACIENTES : registra
+    CLINICAS ||--o{ MEDICOS : emplea
+    CLINICAS ||--o{ ROLESDECLINICA : define
+    USUARIOS ||--o| MEDICOS : vinculado
+    USUARIOS ||--o| USUARIOSDECLINICA : pertenece
+    ROLESDECLINICA ||--o{ USUARIOSDECLINICA : asignado
+    MEDICOS ||--o{ CONSULTAS : atiende
+    PACIENTES ||--o{ CONSULTAS : recibe
+    CONSULTAS ||--o{ DOCUMENTOS : genera

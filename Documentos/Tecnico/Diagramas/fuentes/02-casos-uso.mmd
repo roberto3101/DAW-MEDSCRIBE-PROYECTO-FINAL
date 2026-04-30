@@ -1,0 +1,38 @@
+graph TB
+    Visitante((Visitante))
+    Medico((Medico))
+    Admin((Administrador))
+
+    Admin -.heredaDe.-> Medico
+
+    subgraph "MedScribe AI - Sistema"
+        CU01[CU-01<br/>Iniciar sesion]
+        CU02[CU-02<br/>Registrar clinica]
+        CU03[CU-03<br/>Gestionar pacientes]
+        CU04[CU-04<br/>Crear consulta con audio]
+        CU05[CU-05<br/>Procesar audio con IA]
+        CU06[CU-06<br/>Aprobar consulta]
+        CU07[CU-07<br/>Descargar documento]
+        CU08[CU-08<br/>Gestionar usuarios]
+        CU09[CU-09<br/>Gestionar roles]
+        CU10[CU-10<br/>Configurar formato documentos]
+    end
+
+    Visitante --> CU02
+    Medico --> CU01
+    Medico --> CU03
+    Medico --> CU04
+    Medico --> CU05
+    Medico --> CU06
+    Medico --> CU07
+
+    Admin --> CU08
+    Admin --> CU09
+    Admin --> CU10
+
+    CU04 -.include.-> CU05
+    CU05 -.include.-> CU07
+
+    style Medico fill:#10b981,color:#fff
+    style Admin fill:#f59e0b,color:#fff
+    style Visitante fill:#94a3b8,color:#fff

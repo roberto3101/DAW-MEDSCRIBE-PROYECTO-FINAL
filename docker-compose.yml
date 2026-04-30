@@ -1,0 +1,70 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: medscribe-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SA_PASSWORD:-MedScribe2026!}
+      MYSQL_DATABASE: MedScribeDB
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      # Mapeado a 3307 externo para no chocar con MySQL local en 3306.
+      # Dentro de la red Docker el gateway sigue usando mysql:3306.
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Auto-import schema + seed on first start
+      - ./base-datos/migraciones/MedScribeDB_MigracionCompleta_MySQL.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${SA_PASSWORD:-MedScribe2026!}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  servicio-ia:
+    build: ./servicio-ia
+    container_name: medscribe-servicio-ia
+    restart: unless-stopped
+    ports:
+      - "${AI_SERVICE_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MEDSCRIBE_DATOS_DIR=/app/datos
+    volumes:
+      - ./servicio-ia/datos:/app/datos
+
+  gateway:
+    build: ./gateway-java
+    container_name: medscribe-gateway
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      servicio-ia:
+        condition: service_started
+    ports:
+      - "${GATEWAY_PORT:-5000}:5000"
+    environment:
+      # Override application.properties for docker networking
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/MedScribeDB?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${SA_PASSWORD:-MedScribe2026!}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      MEDSCRIBE_SERVICIO_IA_URL: http://servicio-ia:8000
+      MEDSCRIBE_CORS_ORIGENES_PERMITIDOS: http://localhost:3000,http://localhost:4200
+      MEDSCRIBE_JWT_SECRET: ${JWT_SECRET:-clave-secreta-super-segura-medscribe-cambiar-en-produccion-minimo-256-bits}
+
+  cliente-web:
+    build: ./cliente-web
+    container_name: medscribe-cliente-web
+    restart: unless-stopped
+    depends_on:
+      - gateway
+    ports:
+      - "3000:80"
+
+volumes:
+  mysql_data:

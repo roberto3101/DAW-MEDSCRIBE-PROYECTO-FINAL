@@ -1,0 +1,54 @@
+graph LR
+    subgraph "Cliente Web (Angular 17)"
+        Pages[Paginas<br/>12 standalone]
+        Services[Servicios HTTP<br/>7 services]
+        Guards[authGuard]
+        Inter[authInterceptor]
+        Layouts[Plantilla<br/>Publica/Autenticada]
+    end
+
+    subgraph "Gateway Java (Spring Boot 3.3)"
+        Controllers[7 Controladores REST]
+        ServicesJ[8 Servicios @Service]
+        Repos[14 Repositorios JPA]
+        Entities[14 Entidades JPA]
+        SecConfig[SecurityConfig<br/>+ JwtFiltro<br/>+ JwtUtil]
+    end
+
+    subgraph "Servicio IA (Python FastAPI)"
+        Routers[6 Routers<br/>transcripcion / procesar /<br/>configuracion / documentos]
+        IASvcs[Servicios IA<br/>Whisper cascade<br/>LLM cascade]
+        DocGen[Generadores<br/>PDF / Word]
+    end
+
+    subgraph "MySQL 8.0"
+        Tables[14 Tablas<br/>+ FK + indices]
+    end
+
+    subgraph "Externos"
+        OpenAICompat[Proveedores compatibles OpenAI:<br/>Groq, HF, Mistral, SambaNova,<br/>Cerebras, NVIDIA, LLM7, GitHub Models]
+        DeepgramAPI[Deepgram API]
+    end
+
+    Pages --> Services
+    Services --> Inter
+    Pages --> Guards
+    Guards --> Layouts
+    Inter -->|HTTP /api| Controllers
+    Inter -->|HTTP /api/ia| Routers
+
+    Controllers --> ServicesJ
+    Controllers --> SecConfig
+    ServicesJ --> Repos
+    Repos --> Entities
+    Entities --> Tables
+
+    Routers --> IASvcs
+    Routers --> DocGen
+    IASvcs -.cascade.-> OpenAICompat
+    IASvcs -.fallback.-> DeepgramAPI
+
+    style Pages fill:#0ea5e9,color:#fff
+    style Controllers fill:#10b981,color:#fff
+    style Routers fill:#8b5cf6,color:#fff
+    style Tables fill:#f59e0b,color:#fff

@@ -1,0 +1,44 @@
+sequenceDiagram
+    actor User as Medico
+    participant FE as Angular<br/>(cliente-web)
+    participant IA as servicio-ia<br/>(FastAPI)
+    participant Groq as Groq<br/>Whisper-large-v3
+    participant HF as HuggingFace<br/>router
+    participant Mistral as Mistral<br/>Voxtral
+    participant DG as Deepgram<br/>Nova-3
+    participant API as gateway-java
+    participant DB as MySQL
+
+    User->>FE: Click "Procesar con IA"
+    FE->>IA: POST /api/ia/transcribir<br/>(multipart audio.webm)
+
+    rect rgb(255, 240, 240)
+        note right of IA: Cascade Whisper
+        IA->>Groq: transcribe(audio)
+        Groq--xIA: 403 Access denied (red)
+        IA->>HF: transcribe(audio)
+        HF--xIA: 404 Not Found
+        IA->>Mistral: transcribe(audio)
+        Mistral-->>IA: "El paciente de 30 anos..."
+    end
+
+    IA-->>FE: {transcripcion}
+    FE->>FE: Validar length >= 10
+
+    FE->>IA: POST /api/ia/procesar<br/>{transcripcion, especialidad, tipo_documento}
+
+    rect rgb(240, 240, 255)
+        note right of IA: Cascade LLM
+        IA->>Groq: chat.completions
+        Groq--xIA: 403 Access denied
+        IA->>Mistral: chat.completions
+        Mistral-->>IA: "## S - Subjetivo<br/>El paciente..."
+    end
+
+    IA-->>FE: {nota_clinica, clasificacion}
+
+    FE->>API: POST /api/consultas/registrar<br/>(JWT)
+    API->>DB: INSERT INTO Consultas<br/>(estado='Borrador')
+    DB-->>API: idConsulta = 42
+    API-->>FE: 201 {idConsulta: 42}
+    FE-->>User: Muestra transcripcion + nota SOAP

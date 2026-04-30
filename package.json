@@ -1,0 +1,16 @@
+{
+  "name": "medscribe-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MedScribe AI - levanta MySQL, Servicio IA (FastAPI), Gateway Java y Frontend Angular con Docker.",
+  "scripts": {
+    "dev": "docker compose up --build",
+    "start": "docker compose up --build",
+    "up": "docker compose up -d --build",
+    "down": "docker compose down",
+    "logs": "docker compose logs -f",
+    "restart": "docker compose down && docker compose up --build",
+    "rebuild": "docker compose build --no-cache",
+    "clean": "docker compose down -v"
+  }
+}

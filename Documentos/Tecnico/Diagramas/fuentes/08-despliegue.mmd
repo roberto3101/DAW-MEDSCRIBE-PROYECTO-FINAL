@@ -1,0 +1,37 @@
+graph TB
+    subgraph "Maquina del desarrollador o servidor de demo"
+        subgraph "Docker Compose Network: default"
+            DC1[medscribe-mysql<br/>mysql:8.0<br/>Vol: mysql_data<br/>Healthcheck: mysqladmin ping]
+            DC2[medscribe-gateway<br/>eclipse-temurin:17-jre-alpine<br/>JAR de Spring Boot]
+            DC3[medscribe-servicio-ia<br/>python:3.12-slim<br/>uvicorn]
+            DC4[medscribe-cliente-web<br/>nginx:alpine<br/>Build estatico de Angular]
+        end
+
+        subgraph "Puertos expuestos al host"
+            P1[3307: MySQL]
+            P2[5000: Gateway Java]
+            P3[8000: Servicio IA]
+            P4[3000: Frontend Angular]
+        end
+    end
+
+    subgraph "Internet"
+        Browser[Navegador del usuario]
+        APIs[APIs externas:<br/>Groq, HF, Mistral,<br/>Deepgram, etc.]
+    end
+
+    Browser -->|http://localhost:3000| P4
+    P4 --> DC4
+    DC4 -->|nginx proxy_pass /api| DC2
+    DC4 -->|nginx proxy_pass /api/ia| DC3
+    DC2 -->|JDBC| DC1
+    DC3 -.->|HTTPS| APIs
+
+    P1 --> DC1
+    P2 --> DC2
+    P3 --> DC3
+
+    style DC1 fill:#f59e0b,color:#fff
+    style DC2 fill:#10b981,color:#fff
+    style DC3 fill:#8b5cf6,color:#fff
+    style DC4 fill:#0ea5e9,color:#fff
